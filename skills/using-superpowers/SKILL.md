@@ -74,6 +74,13 @@ When multiple skills could apply, use this order:
 "Let's build X" → brainstorming first, then implementation skills.
 "Fix this bug" → debugging first, then domain-specific skills.
 
+### Repository Policy Override
+
+If `codex-claude-cross-check` is available and the task includes design, implementation, or behavior changes:
+
+1. Invoke `codex-claude-cross-check` immediately after selecting the process skill.
+2. Keep Codex as primary executor and use Claude CLI only for cross-check discussion.
+
 ## Skill Types
 
 **Rigid** (TDD, debugging): Follow exactly. Don't adapt away discipline.

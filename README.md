@@ -105,6 +105,7 @@ Fetch and follow instructions from https://raw.githubusercontent.com/obra/superp
 - **using-git-worktrees** - Parallel development branches
 - **finishing-a-development-branch** - Merge/PR decision workflow
 - **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)
+- **codex-claude-cross-check** - Codex-led execution with Claude CLI cross-checks and risky-action blocking
 
 **Meta**
 - **writing-skills** - Create new skills following best practices (includes testing methodology)
