@@ -92,10 +92,11 @@ Then: Cleanup worktree (Step 5)
 # Push branch
 git push -u origin <feature-branch>
 
-# Create PR
+# Create PR in the repository standard format
+# (must match .github/PULL_REQUEST_TEMPLATE.md headings)
 gh pr create --title "<title>" --body "$(cat <<'EOF'
 ## Summary
-<2-3 bullets of what changed>
+- <2-3 bullets of what changed>
 
 ## Test Plan
 - [ ] <verification steps>
@@ -175,6 +176,10 @@ git worktree remove <worktree-path>
 **No confirmation for discard**
 - **Problem:** Accidentally delete work
 - **Fix:** Require typed "discard" confirmation
+
+**PR body missing required sections**
+- **Problem:** Inconsistent PRs and missing verification evidence
+- **Fix:** Keep `## Summary` and `## Test Plan` headings exactly as template
 
 ## Red Flags
 
