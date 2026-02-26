@@ -4,7 +4,8 @@ Generate Playwright test code automatically as you interact with the browser.
 
 ## How It Works
 
-Every action you perform with `playwright-cli` generates corresponding Playwright TypeScript code.
+Every action you perform with `playwright-cli` generates corresponding
+Playwright TypeScript code.
 This code appears in the output and can be copied directly into your test files.
 
 ## Example Workflow
@@ -15,7 +16,8 @@ playwright-cli open https://example.com/login
 
 # Take a snapshot to see elements
 playwright-cli snapshot
-# Output shows: e1 [textbox "Email"], e2 [textbox "Password"], e3 [button "Sign In"]
+# Output shows:
+# e1 [textbox "Email"], e2 [textbox "Password"], e3 [button "Sign In"]
 
 # Fill form fields - generates code automatically
 playwright-cli fill e1 "user@example.com"

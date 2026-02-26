@@ -89,7 +89,8 @@ playwright-cli cookie-get session_id
 playwright-cli cookie-set session abc123
 
 # Cookie with options
-playwright-cli cookie-set session abc123 --domain=example.com --path=/ --httpOnly --secure --sameSite=Lax
+playwright-cli cookie-set session abc123 \
+  --domain=example.com --path=/ --httpOnly --secure --sameSite=Lax
 
 # Cookie with expiration (Unix timestamp)
 playwright-cli cookie-set remember_me token123 --expires=1735689600
@@ -114,8 +115,19 @@ For complex scenarios like adding multiple cookies at once, use `run-code`:
 ```bash
 playwright-cli run-code "async page => {
   await page.context().addCookies([
-    { name: 'session_id', value: 'sess_abc123', domain: 'example.com', path: '/', httpOnly: true },
-    { name: 'preferences', value: JSON.stringify({ theme: 'dark' }), domain: 'example.com', path: '/' }
+    {
+      name: 'session_id',
+      value: 'sess_abc123',
+      domain: 'example.com',
+      path: '/',
+      httpOnly: true
+    },
+    {
+      name: 'preferences',
+      value: JSON.stringify({ theme: 'dark' }),
+      domain: 'example.com',
+      path: '/'
+    }
   ]);
 }"
 ```
@@ -128,13 +140,13 @@ playwright-cli run-code "async page => {
 playwright-cli localstorage-list
 ```
 
-### Get Single Value
+### Get Session Value
 
 ```bash
 playwright-cli localstorage-get token
 ```
 
-### Set Value
+### Set Session Value
 
 ```bash
 playwright-cli localstorage-set theme dark
@@ -146,7 +158,7 @@ playwright-cli localstorage-set theme dark
 playwright-cli localstorage-set user_settings '{"theme":"dark","language":"en"}'
 ```
 
-### Delete Single Item
+### Delete Session Item
 
 ```bash
 playwright-cli localstorage-delete token
@@ -253,7 +265,10 @@ playwright-cli open https://app.example.com/dashboard
 ```bash
 # Set up authentication state
 playwright-cli open https://example.com
-playwright-cli eval "() => { document.cookie = 'session=abc123'; localStorage.setItem('user', 'john'); }"
+playwright-cli eval "() => {
+  document.cookie = 'session=abc123';
+  localStorage.setItem('user', 'john');
+}"
 
 # Save state to file
 playwright-cli state-save my-session.json

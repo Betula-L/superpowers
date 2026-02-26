@@ -156,6 +156,7 @@ playwright-cli video-stop video.webm
 ```
 
 ## Open parameters
+
 ```bash
 # Use specific browser when creating session
 playwright-cli open --browser=chrome
@@ -194,7 +195,9 @@ After each command, playwright-cli provides a snapshot of the current browser st
 
 You can also take a snapshot on demand using `playwright-cli snapshot` command.
 
-If `--filename` is not provided, a new snapshot file is created with a timestamp. Default to automatic file naming, use `--filename=` when artifact is a part of the workflow result.
+If `--filename` is not provided, a new snapshot file is created with a
+timestamp. Default to automatic file naming, and use `--filename=` when
+the artifact is part of the workflow result.
 
 ## Browser Sessions
 
@@ -216,7 +219,9 @@ playwright-cli kill-all
 
 ## Local installation
 
-In some cases user might want to install playwright-cli locally. If running globally available `playwright-cli` binary fails, use `npx playwright-cli` to run the commands. For example:
+In some cases, users might want to install `playwright-cli` locally.
+If running the globally available `playwright-cli` binary fails,
+use `npx playwright-cli` to run commands. For example:
 
 ```bash
 npx playwright-cli open https://example.com

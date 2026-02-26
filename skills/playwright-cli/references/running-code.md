@@ -1,6 +1,7 @@
 # Running Custom Playwright Code
 
-Use `run-code` to execute arbitrary Playwright code for advanced scenarios not covered by CLI commands.
+Use `run-code` to execute arbitrary Playwright code for advanced scenarios
+not covered by CLI commands.
 
 ## Syntax
 
@@ -17,7 +18,10 @@ playwright-cli run-code "async page => {
 # Grant geolocation permission and set location
 playwright-cli run-code "async page => {
   await page.context().grantPermissions(['geolocation']);
-  await page.context().setGeolocation({ latitude: 37.7749, longitude: -122.4194 });
+  await page.context().setGeolocation({
+    latitude: 37.7749,
+    longitude: -122.4194
+  });
 }"
 
 # Set location to London
