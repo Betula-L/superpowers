@@ -149,6 +149,7 @@ run_claude_with_timeout() {
     local prompt="$2"
     local output_file="$3"
     local error_file="$4"
+    local prompt_file
     local started
     local claude_pid
     local -a cmd
@@ -177,10 +178,11 @@ run_claude_with_timeout() {
         echo "${previous_offset}"
     }
 
+    prompt_file="$(mktemp)"
+    printf '%s' "${prompt}" > "${prompt_file}"
     cmd=("${claude_cmd}" -p --output-format text)
-    cmd+=("${prompt}")
 
-    "${cmd[@]}" >"${output_file}" 2>"${error_file}" &
+    "${cmd[@]}" <"${prompt_file}" >"${output_file}" 2>"${error_file}" &
     claude_pid=$!
     started=$(date +%s)
 
@@ -197,6 +199,7 @@ run_claude_with_timeout() {
             out_offset="$(append_stream_delta "${output_file}" "${out_offset}" "stdout")"
             err_offset="$(append_stream_delta "${error_file}" "${err_offset}" "stderr")"
             echo "--- timeout after ${timeout}s ---" >> "${stream_file}"
+            rm -f "${prompt_file}"
             return 124
         fi
         sleep 1
@@ -207,7 +210,9 @@ run_claude_with_timeout() {
     echo "--- process exited normally ---" >> "${stream_file}"
 
     wait "${claude_pid}"
-    return $?
+    local rc=$?
+    rm -f "${prompt_file}"
+    return "${rc}"
 }
 
 attempt=1
