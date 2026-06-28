@@ -36,6 +36,9 @@ skills/codex-claude-cross-check/claude-cross-check.sh "Explain trade-offs betwee
   - `CLAUDE_TIMEOUT_SECONDS` (default `90`)
   - `CLAUDE_MAX_ATTEMPTS` (default `2`)
   - `CLAUDE_SCAN_MAX_BYTES` (default `524288`, safety-scan input cap)
+- To override the Claude executable, set:
+  - `CLAUDE_CROSS_CHECK_CMD` (default `claude`)
+  - On macOS when launched from Codex, the script auto-uses `$HOME/.local/bin/claude-gui` if present. This runs Claude through Terminal.app so Claude Code can use the same Keychain-backed GUI subscription login without requiring `CLAUDE_CODE_OAUTH_TOKEN`.
 - For streaming output inspection, set:
   - `CLAUDE_STREAM_FILE` (path to a temp/log file that is appended during execution)
   - If `CLAUDE_STREAM_FILE` is not provided, script creates a temporary stream file and removes it on exit
@@ -62,4 +65,8 @@ When blocked:
 # Ask Claude for cross-check (timeout, retry, and risky-output blocking)
 CLAUDE_TIMEOUT_SECONDS=75 CLAUDE_MAX_ATTEMPTS=2 CLAUDE_STREAM_FILE=/tmp/claude-cross-check.log \
 skills/codex-claude-cross-check/claude-cross-check.sh "Review this migration strategy for rollback safety."
+
+# Force the GUI-session shim when Keychain auth works in Terminal but not in Codex
+CLAUDE_CROSS_CHECK_CMD="$HOME/.local/bin/claude-gui" \
+skills/codex-claude-cross-check/claude-cross-check.sh "Check whether this refactor misses edge cases."
 ```

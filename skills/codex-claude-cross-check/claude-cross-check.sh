@@ -14,6 +14,7 @@ user_prompt="$*"
 timeout_seconds="${CLAUDE_TIMEOUT_SECONDS:-90}"
 max_attempts="${CLAUDE_MAX_ATTEMPTS:-2}"
 scan_max_bytes="${CLAUDE_SCAN_MAX_BYTES:-524288}"
+claude_cmd="${CLAUDE_CROSS_CHECK_CMD:-}"
 
 if ! [[ "${timeout_seconds}" =~ ^[0-9]+$ ]] || (( timeout_seconds < 1 )); then
     timeout_seconds=90
@@ -27,8 +28,36 @@ if ! [[ "${scan_max_bytes}" =~ ^[0-9]+$ ]] || (( scan_max_bytes < 1024 )); then
     scan_max_bytes=524288
 fi
 
-if ! command -v claude >/dev/null 2>&1; then
-    echo "claude command not found." >&2
+is_codex_process_tree() {
+    local pid="$$"
+    local command
+    local parent
+
+    while [[ -n "${pid}" && "${pid}" != "0" ]]; do
+        command="$(ps -o command= -p "${pid}" 2>/dev/null || true)"
+        if [[ "${command}" == *"/codex"* || "${command}" == *" codex"* ]]; then
+            return 0
+        fi
+
+        parent="$(ps -o ppid= -p "${pid}" 2>/dev/null | tr -d '[:space:]' || true)"
+        if [[ -z "${parent}" || "${parent}" == "${pid}" ]]; then
+            break
+        fi
+        pid="${parent}"
+    done
+
+    return 1
+}
+
+if [[ -z "${claude_cmd}" ]]; then
+    claude_cmd="claude"
+    if [[ "$(uname -s)" == "Darwin" ]] && is_codex_process_tree && [[ -x "${HOME}/.local/bin/claude-gui" ]]; then
+        claude_cmd="${HOME}/.local/bin/claude-gui"
+    fi
+fi
+
+if ! command -v "${claude_cmd}" >/dev/null 2>&1; then
+    echo "Claude command not found: ${claude_cmd}" >&2
     exit 127
 fi
 
@@ -148,7 +177,7 @@ run_claude_with_timeout() {
         echo "${previous_offset}"
     }
 
-    cmd=(claude -p --output-format text)
+    cmd=("${claude_cmd}" -p --output-format text)
     cmd+=("${prompt}")
 
     "${cmd[@]}" >"${output_file}" 2>"${error_file}" &
